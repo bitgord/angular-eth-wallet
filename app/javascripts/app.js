@@ -9,7 +9,18 @@ app.controller("ShoweventsController", function($scope) {
 });
 
 app.controller("SendfundsController", function($scope) {
-  $scope.myVar ='Sendfunds';
+
+  var contract = SimpleWallet.deployed();
+
+  web3.eth.sendTransaction({from: address, to: contract.address, value: web3.toWei(amount, "ether")}, function(error, result) {
+    if(error) {
+      $scope.has_errors = "I did not work";
+    } else {
+      $scope.transfer_success = true;
+    }
+    $scope.$apply();
+  });
+
 });
 
 app.config(function($routeProvider) {
