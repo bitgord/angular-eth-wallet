@@ -10,16 +10,22 @@ app.controller("ShoweventsController", function($scope) {
 
 app.controller("SendfundsController", function($scope) {
 
+  $scope.accounts = web3.eth.accounts;
+
   var contract = SimpleWallet.deployed();
 
-  web3.eth.sendTransaction({from: address, to: contract.address, value: web3.toWei(amount, "ether")}, function(error, result) {
-    if(error) {
-      $scope.has_errors = "I did not work";
-    } else {
-      $scope.transfer_success = true;
-    }
-    $scope.$apply();
-  });
+  $scope.depositFunds = function(address, amount) {
+    var contract = SimpleWallet.deployed();
+
+    web3.eth.sendTransaction({from: address, to: contract.address, value: web3.toWei(amount, "ether")}, function(error, result) {
+      if(error) {
+        $scope.has_errors = "I did not work";
+      } else {
+        $scope.transfer_success = true;
+      }
+      $scope.$apply();
+    });
+  }
 
 });
 
