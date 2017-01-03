@@ -3,7 +3,7 @@ contract SimpleWallet {
 	// address is the owner
 	address owner;
 	// mapping to determine if someone is allowed to send funds
-	mapping(address => bool) isAllowedToSendFundsMappints;
+	mapping(address => bool) isAllowedToSendFundsMapping;
 
 	// event for deposit and for withdraw
 	event Deposit(address _sender, uint amount);
@@ -18,7 +18,7 @@ contract SimpleWallet {
 	// the msg.sender needs to be the owner or allowed to send funds to deposit them
 	// we also emit an event called deposit and declare the msg sender and the value 
 	function() {
-		if(msg.sender == owner || isAllowsToSendFundsMapping[msg.sender] == true) {
+		if(msg.sender == owner || isAllowedToSendFundsMapping[msg.sender] == true) {
 			Deposit(msg.sender, msg.value);
 		} else {
 			throw;
@@ -36,7 +36,7 @@ contract SimpleWallet {
 					throw;
 				}
 				Withdraw(msg.sender, amount, receiver);
-				return this.balance
+				return this.balance;
 			}
 		}
 	}
