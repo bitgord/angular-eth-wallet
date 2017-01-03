@@ -47,5 +47,34 @@ contract('SimpleWallet', function(accounts) {
 			});
 	});
 
+	it("should check Deposit Events", function(done) {
+		var meta = SimpleWallet.deployed();
+
+		// watch for all events
+		var event = meta.allEvents();
+		event.watch(function (error, result) {
+			if (error) {
+				console.err(error);
+			} else {
+				// now we check that the events are correct // we check that the Deposit function was called from the sendTransaction below
+				assert.equal(result.event, "Deposit");
+				// we check that it was 1 ether that was deposited
+				assert.equal(web3.fromWei(result.args.amount.valueOf(), "ether"), 1);
+				// make sure the ether was sent from account 0
+				assert.equal(result.args._sender.valueOf(), web3.eth.accounts[0]);
+				// stop watching and test is done
+				event.stopWatching();
+				done();
+			}
+		});
+		// we'll send ether to the contract
+		web3.eth.sendTransaction({ from: web3.eth.accounts[0], to: meta.address, value: web3.toWei(1, "ether")});
+	});
+
 
 });
+
+
+
+
+
