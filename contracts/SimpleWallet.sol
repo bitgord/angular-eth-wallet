@@ -57,7 +57,7 @@ contract SimpleWallet {
 
 	// Check function which returns the boolean value
 	function isAllowedToSend(address _address) constant returns (bool) {
-		return isAllowedToSendFundsMapping[_address] || msg.sender == owner;
+		return isAllowedToSendFundsMapping[_address] || _address == owner;
 	}
 
 	// check to make sure the msg.sender is the owner or it will suicide the contract and return funds to the owner
