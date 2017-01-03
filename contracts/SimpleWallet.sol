@@ -57,6 +57,16 @@ contract SimpleWallet {
 		}
 	}
 
+	// function to get the number of withdrawls and return each withdrawl
+	function getAmountOfWithdrawls(address _address) constant returns (uint) {
+        return isAllowedToSendFundsMapping[_address].amount_sends;
+      }
+
+	// function to get the withdrawl amount for the address and return amount and address
+	function getWithdrawlForAddress(address _address, uint index) constant returns (address, uint) {
+        return (isAllowedToSendFundsMapping[_address].withdrawls[index].to, isAllowedToSendFundsMapping[_address].withdrawls[index].amount);
+      }
+
 	// Allowed to send funds when the boolean mapping is set to true
 	function allowAddressToSendMoney(address _address) {
 		if(msg.sender == owner) {

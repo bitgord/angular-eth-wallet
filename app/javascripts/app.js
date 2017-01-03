@@ -1,7 +1,11 @@
 var app = angular.module("mySimpleWalletDapp", ['ngRoute']);
 
 app.controller("MainController", function($scope) {
-  $scope.myVar ='Main';
+  var contract = SimpleWallet.deployed();
+  $scope.balance = web3.eth.getBalance(contract.address).toNumber();
+  $scope.balanceInEther = web3.fromWei($scope.balance, "ether");
+
+  $scope.withdrawls = [];
 });
 
 app.controller("ShoweventsController", function($scope) {
@@ -12,8 +16,6 @@ app.controller("SendfundsController", function($scope) {
 
   $scope.accounts = web3.eth.accounts;
 
-  var contract = SimpleWallet.deployed();
-
   $scope.depositFunds = function(address, amount) {
     var contract = SimpleWallet.deployed();
 
@@ -23,6 +25,17 @@ app.controller("SendfundsController", function($scope) {
       } else {
         $scope.transfer_success = true;
       }
+      $scope.$apply();
+    });
+  };
+
+  $scope.withdrawFunds = function(address, amount) {
+    var contract = SimpleWallet.deployed();
+    contract.sendFunds(amount, address, {from: web3.eth.accounts[0]}).then(function (newBalance) {
+      $scope.transfer_success = true;
+      $scope.$apply();
+    }, function (error) {
+      $scope.has_errors = error;
       $scope.$apply();
     });
   }
@@ -39,5 +52,8 @@ app.config(function($routeProvider) {
   }).when('/sendfunds', {
     templateUrl: 'views/sendfunds.html',
     controller: 'SendfundsController'
+  }).when('/permissions', {
+    templateUrl: 'views/permissions.html',
+    controller: 'PermissionsController'
   }).otherwise({redirectTo: '/'});
 });
