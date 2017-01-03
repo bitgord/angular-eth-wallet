@@ -6,6 +6,19 @@ app.controller("MainController", function($scope) {
   $scope.balanceInEther = web3.fromWei($scope.balance, "ether");
 
   $scope.withdrawls = [];
+
+  contract.getAmountOfWithdrawls.call(web3.eth.accounts[0]).then(function(result) {
+    var numberOfWithdrawls = result.toNumber();
+    for(var i = 1; 1<= numberOfWithdrawls; i++) {
+      contract.getWithDrawlForAddress.call(web3.eth.accounts[0], 1).then(function(result_withdrawl) {
+        result_withdrawl[1] = web3.fromWei(result_withdrawl[1], "ether").toNumber();
+        $scope.withdrawls.push(result_withdrawl);
+        $scope.$apply;
+      });
+    }
+
+    return this;
+  });
 });
 
 app.controller("ShoweventsController", function($scope) {

@@ -4,6 +4,12 @@
         <h1>Balance</h1>
         {{balanceInEther}} eth
 
+        <h1>Withdrawls</h1>
+        <div ng-repeat="withdrawl in withdrawls">
+        	To:{{withdrawl[0]}}<br />
+        	Amount in Ether:{{web3.fromWei(withdrawl[1], "ether")}}
+        </div>
+
         <h1>Allowed Accounts</h1>
         <div ng-repeat="account in accounts">
             {{account.address}}: {{account.isAllowed}}
