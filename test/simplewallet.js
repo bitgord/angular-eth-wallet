@@ -20,5 +20,32 @@ contract('SimpleWallet', function(accounts) {
 			})
 	});
 
+	// See if we can add accounts to the allowed list
+	it('adding accounts to the allowed list', function() {
+		var myContract = SimpleWallet.deployed();
+			// first check to see if another account is allowed to send funds // it should return false
+			return myContract.isAllowedToSend.call(accounts[1]).then(function(isAllowed) {
+				assert.equal(isAllowed, false, 'the other account was allowed');
+				// then allow the address to send money
+			}).then(function() {
+				return myContract.allowAddressToSendMoney(accounts[1])
+				// then check to see if its allowed to send
+			}).then(function() {
+				return myContract.isAllowedToSend.call(accounts[1]);
+				// this should return true now
+			}).then(function(isAllowed) {
+				assert.equal(true, isAllowed, 'the other account is allowed');
+				// then disallow address from sending money again
+			}).then(function() {
+				return myContract.disallowAddressToSendMoney(accounts[1]);
+				// then check if the account is allowed
+			}).then(function() {
+				return myContract.isAllowedToSend.call(accounts[1]);
+				// it should return false again
+			}).then(function(isAllowed) {
+				assert.equal(false, isAllowed, 'the account was not allowed');
+			});
+	});
+
 
 });
